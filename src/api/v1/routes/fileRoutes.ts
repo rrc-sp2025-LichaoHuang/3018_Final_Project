@@ -5,6 +5,8 @@
 
 import { Router } from "express";
 import * as controller from "../controllers/fileController";
+import { validateRequest } from "../middleware/validateRequest";
+import { createFileSchema, updateFileSchema, } from "../validation/fileSchemas";
 
 const router = Router();
 
@@ -24,13 +26,21 @@ router.get("/:id", controller.getFileById);
  * POST /api/v1/files
  * Create a new file
  */
-router.post("/", controller.createFile);
+router.post(
+  "/",
+  validateRequest(createFileSchema),
+  controller.createFile
+);
 
 /**
  * PUT /api/v1/files/:id
  * Update an existing file
  */
-router.put("/:id", controller.updateFile);
+router.put(
+  "/:id",
+  validateRequest(updateFileSchema),
+  controller.updateFile
+);
 
 /**
  * DELETE /api/v1/files/:id
