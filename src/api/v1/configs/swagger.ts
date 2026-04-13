@@ -10,13 +10,25 @@ const options: swaggerJsdoc.Options = {
       version: "1.0.0",
       description: "RBAC-secured API for managing secret files",
     },
+
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+
     servers: [
       {
         url: "http://localhost:3000/api/v1",
       },
     ],
   },
-  apis: ["./src/api/v1/routes/*.ts"], // 👈 扫描你的 routes
+
+  apis: ["./src/api/v1/routes/*.ts"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);

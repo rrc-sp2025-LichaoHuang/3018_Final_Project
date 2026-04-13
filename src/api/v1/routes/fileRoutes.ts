@@ -14,17 +14,29 @@ import { Role } from "../types/roles";
 const router = Router();
 
 /**
- * Dark Angels RBAC Rules:
- *
- * Brother
- * Master
- * Inner Circle
- * Primarch
+ * @swagger
+ * tags:
+ *   name: Files
+ *   description: Dark Angels secret archive management
  */
 
 /**
- * GET all files
- * GET /api/v1/files
+ * @swagger
+ * /files:
+ *   get:
+ *     summary: Get all files
+ *     tags: [Files]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved files
+ *         content:
+ *           application/json:
+ *             example:
+ *               - id: "123"
+ *                 title: "Dark Angels File"
+ *                 content: "Secret archive"
  */
 router.get(
   "/",
@@ -39,8 +51,24 @@ router.get(
 );
 
 /**
- * GET file by ID
- * GET /api/v1/files/:id
+ * @swagger
+ * /files/{id}:
+ *   get:
+ *     summary: Get a file by ID
+ *     tags: [Files]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: File found
+ *       404:
+ *         description: File not found
  */
 router.get(
   "/:id",
@@ -55,8 +83,34 @@ router.get(
 );
 
 /**
- * CREATE file
- * POST /api/v1/files
+ * @swagger
+ * /files:
+ *   post:
+ *     summary: Create a new file
+ *     tags: [Files]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - content
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: Dark Angels File
+ *               content:
+ *                 type: string
+ *                 example: Secret archive
+ *     responses:
+ *       201:
+ *         description: File created successfully
+ *       400:
+ *         description: Invalid input
  */
 router.post(
   "/",
@@ -66,8 +120,30 @@ router.post(
 );
 
 /**
- * UPDATE file
- * PUT /api/v1/files/:id
+ * @swagger
+ * /files/{id}:
+ *   put:
+ *     summary: Update a file
+ *     tags: [Files]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           example:
+ *             title: Updated title
+ *             content: Updated content
+ *     responses:
+ *       200:
+ *         description: File updated
+ *       404:
+ *         description: File not found
  */
 router.put(
   "/:id",
@@ -77,8 +153,24 @@ router.put(
 );
 
 /**
- * DELETE file
- * DELETE /api/v1/files/:id
+ * @swagger
+ * /files/{id}:
+ *   delete:
+ *     summary: Delete a file
+ *     tags: [Files]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: File deleted
+ *       404:
+ *         description: File not found
  */
 router.delete(
   "/:id",
