@@ -1,16 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { auth } from "../configs/firebaseConfig"
+import { auth } from "../configs/firebaseConfig";
+import { Role } from "../types/roles";
 
 /**
  * Authentication Middleware
- * 
+ *
  * Purpose:
- * - Verify Firebase ID Token from request header
- * - Extract user information (uid, role)
- * - Attach user data to res.locals for next middleware/controller
- * 
- * Expected Header:
- * Authorization: Bearer <Firebase ID Token>
+ * - Verify Firebase ID Token
+ * - Extract uid and role
+ * - Store user data in res.locals
  */
 export const authenticate = async (
   req: Request,
@@ -23,7 +21,6 @@ export const authenticate = async (
      */
     const authHeader = req.headers.authorization;
 
-    // If no token provided
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         message: "Authentication token missing",
@@ -36,33 +33,29 @@ export const authenticate = async (
     const idToken = authHeader.split("Bearer ")[1];
 
     /**
-     * Step 3: Verify token with Firebase
+     * Step 3: Verify token
      */
     const decodedToken = await auth.verifyIdToken(idToken);
 
     /**
-     * Step 4: Extract user info
-     * uid: Firebase user ID
-     * role: Custom claim (we will use for RBAC)
+     * Step 4: Extract uid and role
      */
     const uid = decodedToken.uid;
-    const role = decodedToken.role || "Brother"; // default role
+
+    // Cast role to our enum type
+    const role: Role = (decodedToken.role as Role) || Role.Brother;
 
     /**
      * Step 5: Store in res.locals
-     * So next middleware/controller can access it
      */
     res.locals.uid = uid;
     res.locals.role = role;
 
     /**
-     * Step 6: Continue request
+     * Step 6: Continue
      */
     next();
   } catch (error) {
-    /**
-     * Token invalid / expired
-     */
     return res.status(401).json({
       message: "Invalid or expired token",
     });
