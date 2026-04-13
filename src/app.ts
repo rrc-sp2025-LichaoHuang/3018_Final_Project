@@ -1,6 +1,7 @@
 import express, { Express } from "express";
 import fileRoutes from "./api/v1/routes/fileRoutes";
 import adminRoutes from "./api/v1/routes/adminRoutes";
+import setupSwagger from "./api/v1/configs/swagger";
 
 // Initialize Express application
 const app: Express = express();
@@ -22,5 +23,7 @@ app.get("/api/v1/health", (req, res) => {
 app.use("/api/v1/files", fileRoutes);
 
 app.use("/api/v1/admin", adminRoutes);
+
+setupSwagger(app);
 
 export default app;
