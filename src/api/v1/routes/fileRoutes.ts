@@ -1,51 +1,71 @@
-/**
- * Routes Layer for File API
- * This defines all endpoints related to file operations.
- */
-
 import { Router } from "express";
-import * as controller from "../controllers/fileController";
-import { validateRequest } from "../middleware/validateRequest";
-import { createFileSchema, updateFileSchema, } from "../validation/fileSchemas";
+import {
+  getAllFiles,
+  getFileById,
+  createFile,
+  updateFile,
+  deleteFile,
+} from "../controllers/fileController";
+
+import { authenticate } from "../middleware/authenticate";
+import { authorizeRoles } from "../middleware/authorizeRoles";
 
 const router = Router();
 
-/**
- * GET /api/v1/files
- * Get all files
- */
-router.get("/", controller.getAllFiles);
 
 /**
- * GET /api/v1/files/:id
- * Get a file by ID
+ * GET all files
+ * Roles: Brother, Master, Inner Circle, Primarch
  */
-router.get("/:id", controller.getFileById);
+router.get(
+  "/files",
+  authenticate,
+  authorizeRoles("Brother", "Master", "Inner Circle", "Primarch"),
+  getAllFiles
+);
 
 /**
- * POST /api/v1/files
- * Create a new file
+ * GET file by ID
+ * Roles: Brother, Master, Inner Circle, Primarch
+ */
+router.get(
+  "/files/:id",
+  authenticate,
+  authorizeRoles("Brother", "Master", "Inner Circle", "Primarch"),
+  getFileById
+);
+
+/**
+ * CREATE file
+ * Roles: Master, Inner Circle, Primarch
  */
 router.post(
-  "/",
-  validateRequest(createFileSchema),
-  controller.createFile
+  "/files",
+  authenticate,
+  authorizeRoles("Master", "Inner Circle", "Primarch"),
+  createFile
 );
 
 /**
- * PUT /api/v1/files/:id
- * Update an existing file
+ * UPDATE file
+ * Roles: Inner Circle, Primarch
  */
 router.put(
-  "/:id",
-  validateRequest(updateFileSchema),
-  controller.updateFile
+  "/files/:id",
+  authenticate,
+  authorizeRoles("Inner Circle", "Primarch"),
+  updateFile
 );
 
 /**
- * DELETE /api/v1/files/:id
- * Delete a file
+ * DELETE file
+ * Roles: Primarch only
  */
-router.delete("/:id", controller.deleteFile);
+router.delete(
+  "/files/:id",
+  authenticate,
+  authorizeRoles("Primarch"),
+  deleteFile
+);
 
 export default router;
