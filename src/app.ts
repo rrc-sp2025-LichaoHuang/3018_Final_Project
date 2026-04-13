@@ -6,7 +6,10 @@ const app: Express = express();
 
 app.use(express.json());
 
-// Health endpoint
+/**
+ * Health endpoint
+ * GET /api/v1/health
+ */
 app.get("/api/v1/health", (req, res) => {
   res.json({
     status: "OK",

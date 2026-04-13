@@ -12,59 +12,53 @@ import { authorizeRoles } from "../middleware/authorizeRoles";
 
 const router = Router();
 
-
 /**
  * GET all files
- * Roles: Brother, Master, Inner Circle, Primarch
  */
 router.get(
-  "/files",
+  "/",
   authenticate,
-  authorizeRoles("Brother", "Master", "Inner Circle", "Primarch"),
+  authorizeRoles(["Brother", "Master", "Inner Circle", "Primarch"]),
   getAllFiles
 );
 
 /**
  * GET file by ID
- * Roles: Brother, Master, Inner Circle, Primarch
  */
 router.get(
-  "/files/:id",
+  "/:id",
   authenticate,
-  authorizeRoles("Brother", "Master", "Inner Circle", "Primarch"),
+  authorizeRoles(["Brother", "Master", "Inner Circle", "Primarch"]),
   getFileById
 );
 
 /**
  * CREATE file
- * Roles: Master, Inner Circle, Primarch
  */
 router.post(
-  "/files",
+  "/",
   authenticate,
-  authorizeRoles("Master", "Inner Circle", "Primarch"),
+  authorizeRoles(["Master", "Inner Circle", "Primarch"]),
   createFile
 );
 
 /**
  * UPDATE file
- * Roles: Inner Circle, Primarch
  */
 router.put(
-  "/files/:id",
+  "/:id",
   authenticate,
-  authorizeRoles("Inner Circle", "Primarch"),
+  authorizeRoles(["Inner Circle", "Primarch"]),
   updateFile
 );
 
 /**
  * DELETE file
- * Roles: Primarch only
  */
 router.delete(
-  "/files/:id",
+  "/:id",
   authenticate,
-  authorizeRoles("Primarch"),
+  authorizeRoles(["Primarch"]),
   deleteFile
 );
 
