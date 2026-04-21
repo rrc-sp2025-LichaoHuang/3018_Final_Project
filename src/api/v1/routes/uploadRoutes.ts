@@ -9,8 +9,10 @@ const router = Router();
  * @openapi
  * /upload:
  *   post:
- *     summary: Upload a file
- *     description: Allows authenticated users to upload files with size and type restrictions.
+ *     summary: Upload a file to Firebase Storage
+ *     description: |
+ *       Allows authenticated users to upload a file. 
+ *       The file is stored in Firebase Storage and its metadata is saved in Firestore.
  *     tags:
  *       - Upload
  *     security:
@@ -21,11 +23,13 @@ const router = Router();
  *         multipart/form-data:
  *           schema:
  *             type: object
+ *             required:
+ *               - file
  *             properties:
  *               file:
  *                 type: string
  *                 format: binary
- *                 description: File to upload
+ *                 description: Image file to upload (PNG, JPG, etc.)
  *     responses:
  *       200:
  *         description: File uploaded successfully
@@ -36,19 +40,19 @@ const router = Router();
  *               properties:
  *                 message:
  *                   type: string
- *                 file:
- *                   type: object
- *                   properties:
- *                     filename:
- *                       type: string
- *                     path:
- *                       type: string
- *                     size:
- *                       type: number
+ *                   example: File uploaded to Firebase successfully
+ *                 id:
+ *                   type: string
+ *                   example: abc123xyz
+ *                 url:
+ *                   type: string
+ *                   example: https://storage.googleapis.com/your-bucket/gallery/example.png
  *       400:
  *         description: No file uploaded
  *       401:
  *         description: Unauthorized
+ *       500:
+ *         description: Upload failed
  */
 router.post(
   "/",

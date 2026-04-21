@@ -13,7 +13,7 @@ import Joi from "joi";
 export const createFileSchema = Joi.object({
   title: Joi.string()
     .trim() // remove extra spaces
-    .required()
+    .required() // add limit of input
     .messages({
       "string.empty": "Title is required",
       "any.required": "Title is required",
@@ -21,7 +21,7 @@ export const createFileSchema = Joi.object({
 
   content: Joi.string()
     .trim()
-    .required()
+    .required() // add limit of input
     .messages({
       "string.empty": "Content is required",
       "any.required": "Content is required",

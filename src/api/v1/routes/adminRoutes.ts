@@ -2,6 +2,7 @@ import { Router } from "express";
 import { setCustomClaims } from "../controllers/adminController";
 import { authenticate } from "../middleware/authenticate";
 import { authorizeRoles } from "../middleware/authorizeRoles";
+import { Role } from "../types/roles";
 
 const router = Router();
 
@@ -11,6 +12,7 @@ const router = Router();
 router.post(
   "/",
   authenticate,
+  authorizeRoles(Role.Primarch),
   setCustomClaims
 );
 
