@@ -1,29 +1,39 @@
-/**
- * Controller Layer for File API
- * This layer handles HTTP requests and responses.
- * It connects routes with the service layer.
- */
-
 import { Request, Response } from "express";
 import * as fileService from "../services/fileService";
 
 /**
- * GET all files
- * Endpoint: GET /api/v1/files
+ * GET all files (with optional sorting)
  */
-export const getAllFiles = (req: Request, res: Response) => {
-  const files = fileService.getAllFiles();
-  res.json(files);
+export const getAllFiles = async (req: Request, res: Response) => {
+  try {
+    const sort = req.query.sort as string;
+
+    let files;
+
+    if (sort) {
+      // with sort
+      files = await fileService.getAllFilesSorted(sort);
+    } else {
+      // with out sort
+      files = await fileService.getAllFiles();
+    }
+
+    res.json(files);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to fetch files",
+    });
+  }
 };
 
 /**
  * GET file by ID
- * Endpoint: GET /api/v1/files/:id
  */
-export const getFileById = (req: Request, res: Response) => {
-  const file = fileService.getFileById(req.params.id as string);
+export const getFileById = async (req: Request, res: Response) => {
+  const file = await fileService.getFileById(req.params.id as string);
 
-  // Handle not found case
   if (!file) {
     return res.status(404).json({ message: "File not found" });
   }
@@ -32,23 +42,22 @@ export const getFileById = (req: Request, res: Response) => {
 };
 
 /**
- * CREATE a new file
- * Endpoint: POST /api/v1/files
+ * CREATE file
  */
-export const createFile = (req: Request, res: Response) => {
-  const file = fileService.createFile(req.body);
-
+export const createFile = async (req: Request, res: Response) => {
+  const file = await fileService.createFile(req.body);
   res.status(201).json(file);
 };
 
 /**
- * UPDATE a file
- * Endpoint: PUT /api/v1/files/:id
+ * UPDATE file
  */
-export const updateFile = (req: Request, res: Response) => {
-  const file = fileService.updateFile(req.params.id as string, req.body);
+export const updateFile = async (req: Request, res: Response) => {
+  const file = await fileService.updateFile(
+    req.params.id as string,
+    req.body
+  );
 
-  // Handle not found
   if (!file) {
     return res.status(404).json({ message: "File not found" });
   }
@@ -57,13 +66,11 @@ export const updateFile = (req: Request, res: Response) => {
 };
 
 /**
- * DELETE a file
- * Endpoint: DELETE /api/v1/files/:id
+ * DELETE file
  */
-export const deleteFile = (req: Request, res: Response) => {
-  const success = fileService.deleteFile(req.params.id as string);
+export const deleteFile = async (req: Request, res: Response) => {
+  const success = await fileService.deleteFile(req.params.id as string);
 
-  // Handle not found
   if (!success) {
     return res.status(404).json({ message: "File not found" });
   }
