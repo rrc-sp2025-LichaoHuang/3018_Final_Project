@@ -34,11 +34,33 @@ src/
 
 This API uses Firebase Authentication and custom role-based authorization.
 
-Roles:
-- Brother
-- Master
-- InnerCircle
-- Primarch
+### Brother
+- Can view all files
+- Cannot create, update, or delete files
+- Cannot upload files
+- Intended for basic users with read-only access
+
+### Master
+- Can view all files
+- Can create new files
+- Can upload files
+- Cannot update or delete existing files
+- Intended for users who contribute content
+
+### InnerCircle
+- Can view all files
+- Can create new files
+- Can upload files
+- Can update existing files
+- Cannot delete files
+- Intended for advanced users with editing privileges
+
+### Primarch
+- Full access to all system features
+- Can view, create, update, and delete files
+- Can upload files
+- Highest level of authority in the system
+- Intended for administrators
 
 Access control is enforced using middleware to restrict access based on user roles.
 
