@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/rrc-sp2025-LichaoHuang/3018_Final_Project#readme",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/multer": "^2.1.0",
@@ -37,6 +38,7 @@
   },
   "dependencies": {
     "@types/morgan": "^1.9.10",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "firebase-admin": "^13.8.0",
