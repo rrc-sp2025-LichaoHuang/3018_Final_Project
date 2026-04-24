@@ -2,6 +2,8 @@ import { Router } from "express";
 import { upload } from "../middleware/upload";
 import { uploadFile } from "../controllers/uploadController";
 import { authenticate } from "../middleware/authenticate";
+import { authorizeRoles } from "../middleware/authorizeRoles";
+import { Role } from "../types/roles";
 
 const router = Router();
 
@@ -57,7 +59,12 @@ const router = Router();
 router.post(
   "/",
   authenticate,
-  upload.single("file"), // field name = file
+  authorizeRoles(
+    Role.Master,
+    Role.InnerCircle,
+    Role.Primarch
+  ),
+  upload.single("file"),
   uploadFile
 );
 
