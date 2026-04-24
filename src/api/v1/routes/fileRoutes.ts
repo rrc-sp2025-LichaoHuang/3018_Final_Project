@@ -24,10 +24,17 @@ const router = Router();
  * @swagger
  * /files:
  *   get:
- *     summary: Get all files
+ *     summary: Get all files (with optional sorting)
  *     tags: [Files]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           example: createdAt
+ *         description: Sort files by created date
  *     responses:
  *       200:
  *         description: Successfully retrieved files

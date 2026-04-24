@@ -2,11 +2,30 @@ import { Request, Response } from "express";
 import * as fileService from "../services/fileService";
 
 /**
- * GET all files
+ * GET all files (with optional sorting)
  */
 export const getAllFiles = async (req: Request, res: Response) => {
-  const files = await fileService.getAllFiles();
-  res.json(files);
+  try {
+    const sort = req.query.sort as string;
+
+    let files;
+
+    if (sort) {
+      // with sort
+      files = await fileService.getAllFilesSorted(sort);
+    } else {
+      // with out sort
+      files = await fileService.getAllFiles();
+    }
+
+    res.json(files);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to fetch files",
+    });
+  }
 };
 
 /**

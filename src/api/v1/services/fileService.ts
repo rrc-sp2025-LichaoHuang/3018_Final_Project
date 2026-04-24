@@ -70,3 +70,21 @@ export const deleteFile = async (id: string) => {
   await ref.delete();
   return true;
 };
+
+/**
+ * SORT files
+ */
+export const getAllFilesSorted = async (sort?: string) => {
+  let query: FirebaseFirestore.Query = db.collection("files");
+
+  if (sort === "createdAt") {
+    query = query.orderBy("createdAt", "desc");
+  }
+
+  const snapshot = await query.get();
+
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+};
